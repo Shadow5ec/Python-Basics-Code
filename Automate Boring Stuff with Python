@@ -1,0 +1,112 @@
+# Execution Flow 
+
+
+
+
+
+
+
+
+
+
+
+# Functions
+there are inbuilt functions and functions we creat. 
+Purpose of functions is to group code that gets executed multiple times
+
+Statments and parenthesis 
+
+A parameter is a variable that an argument is stored in when a
+function is called.
+Sample 
+
+def hello(name):
+    print("Hello " + name)
+
+hello('john')
+
+
+#return values and statements 
+ In general, the value that a function call evaluates to is called the return value of the function.
+ A return statement consists of the following:
+    •	 The return keyword
+    •	 The value or expression that the function should return
+
+Sample code to understand return statements. 
+
+import random
+
+def getAnswer(answerNumber):
+    if answerNumber == 1:
+        return "This will return 1"
+    elif answerNumber == 2: 
+        return "This will return 2"
+    else:
+        return "Done"
+    
+r = random.randint(1,9)
+num = getAnswer(r)
+
+print(num)
+
+Since return can be passed as an argument to another function you can shorten the above to be. 
+
+import random
+
+def getAnswer(answerNumber):
+    if answerNumber == 1:
+        return "This will return 1"
+    elif answerNumber == 2: 
+        return "This will return 2"
+    else:
+        return "Done"
+
+print(getAnswer(random.randint(1,2)))
+
+# The None Value 
+
+This represents the absence of a value. 
+None is the only value of the NoneType data type. (Other programminglanguages might call this value null, nil, or undefined.)
+
+Keyword Arguments and print()
+
+keyword arguments are identified by the keyword put before them in the function call. Keyword arguments are often used for optional parameters. For example, the print() function has the optional parameters end and sep to specify what should be printed at the end of its arguments and between its arguments (separating them), respectively.
+Most arguments are identified by their position in the function call. For example, random.randint(1, 10) is different from random.randint(10, 1). 
+
+print('Hello', end='')
+print('World')
+the output would look like this:
+HelloWorld
+
+
+But you could replace the default separating string by passing the sep keyword argument. 
+>>> print('cats', 'dogs', 'mice', sep=',')
+cats,dogs,mice
+
+
+Local and Global Scope
+Parameters and variables that are assigned in a called function are said to exist in that function’s local scope. Variables that are assigned outside all functions are said to exist in the global scope.
+A variable must be one or the other; it cannot be both local and global.
+A local scope is created whenever a function is called.
+
+A local scope is created whenever a function is called. Any variables assigned in this function exist within the local scope. When the function returns, the local scope is destroyed, and these variables are forgotten. The
+next time you call this function, the local variables will not remember the values stored in them from the last time the function was called.
+
+
+
+Try and expect statments, when you are not sure about the error to be thrown you can run this 
+
+try:
+    risky_operation()
+except Exception as e:
+    print("Something went wrong:", e)
+
+
+Key Concepts Taught 
+  - Keyword Arguments and print
+  - The None Value
+  - Return Values and return Statements
+  - def Statements with Parameters
+  - Local and Global Scope
+  - The global Statement
+  - Exception Handling
