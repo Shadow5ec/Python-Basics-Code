@@ -1,1 +1,150 @@
 # Sample Code
+# Here is a sample code
+cars = ['subaru','bmw','toyota','benz','audi']
+
+for car in cars:
+    if car == 'bmw':
+        print(car.upper())
+    else:
+        print(car.title())
+
+#At the heart of every if statement is an expression that can be evaluated as True or False and is called a conditional test.Python uses the values True and
+False to decide whether the code in an if statement should be executed.
+
+# Checking for Inequality
+requested_topping = 'mushrooms'
+if requested_topping != 'anchovies':
+    print("Hold the anchovies")
+
+#Numerical Comparisons
+answer = 20
+if answer != 42:
+    print("That is not the correct answer, please try again!")
+
+# Checking Multiple Conditions, sometimes you might need two conditions to be True to take an action. 
+## Using and to Check Multiple Conditions
+# And 
+
+>>> age_0 = 22
+>>> age_1 = 18
+v >>> age_0 >= 21 and age_1 >= 21
+False
+80   Chapter 5
+w >>> age_1 = 22
+>>> age_0 >= 21 and age_1 >= 21
+True 
+
+# or 
+>>> age_0 = 22
+>>> age_1 = 18
+>>> age_0 >= 21 or age_1 >= 21
+True
+>>> age_0 = 18
+>>> age_0 >= 21 or age_1 >= 21
+False 
+
+# Checking Whether a Value Is in a List
+>>> requested_toppings = ['mushrooms', 'onions', 'pineapple']
+>>> 'mushrooms' in requested_toppings
+True
+>>> 'pepperoni' in requested_toppings
+False
+
+# Checking Whether a Value Is Not in a List
+banned_user = ['paul','isaac','james','logan','joseph']
+user = 'alex'
+
+if user not in banned_user:
+    print(user.title()+ ", you can post if you wish")
+
+#Boolean Expressions
+# A Boolean value is either True or False, just like the value of a conditional expression after it has been evaluated.
+
+
+#Simplest form of the if statement. 
+if conditional_test:
+     do some
+
+
+Using Multiple elif Blocks
+
+age = 12
+
+if age < 4:
+    price = 0 
+elif age < 18:
+    price = 5
+elif age < 65:
+    price = 10
+else:
+    price = 5
+print("your admission cos is $" + str(price)+".")
+
+#Omitting the else Block
+
+#Testing Multiple Conditions
+Sometimes it’s important to check all of the conditions of interest. In this case, you should use a series of simple if statements with no elif or else blocks. 
+
+requeste_toppings = ['mushrooms', 'extra cheese']
+
+if 'mushrooms' in requeste_toppings:
+    print("adding mushrooms.")
+if 'pepperoni' in requeste_toppings:
+    print("Adding pepperoni")
+if 'extra cheese' in requeste_toppings:
+    print("Adding extra cheese")
+
+This code above would not work properly if we used an if-elif-else block, because the code would stop running after only one test passes.
+
+
+#Checking for Special Items
+requested_toppings = ['mushrooms', 'green peppers', 'extra cheese']
+
+for requested_topping in requested_toppings:
+    print("Adding " + requested_topping)
+print("Finished making you pizza")
+
+#if statement inside the for loop 
+requested_toppings = ['mushrooms', 'green peppers', 'extra cheese']
+
+for requested_topping in requested_toppings:
+    if requested_topping == 'green peppers':
+        print("sorry, we are out of green peppers right now")
+    print("Adding " + requested_topping)
+print("Finished making you pizza")
+
+#Checking That a List Is Not Empty
+requested_toppings = []
+
+if requested_toppings:
+    for requested_topping in requested_toppings:
+        print("Adding " + requested_topping + ".")
+    print("\nFinished making your pizza!")
+else:
+    print("Are you sure you want a plain pizza? ")
+
+
+#Using Multiple Lists
+available_toppings = ['mushrooms', 'olives', 'green peppers','pepperoni', 'pineapple', 'extra cheese']
+requested_toppings = ['mushrooms', 'french fries', 'extra cheese']
+for requested_topping in requested_toppings:
+    if requested_topping in available_toppings:
+        print("Adding " + requested_topping + ".")
+    else:
+        print("Sorry, we do not have the " + requested_topping + ".")
+print("\nFinished making you pizza")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
