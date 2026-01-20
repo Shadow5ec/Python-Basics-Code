@@ -1,4 +1,4 @@
-# Simple Dictonary 
+#  Dictonary 
 A dictionary in Python is a collection of key-value pairs. Each key is connected to a value, and you can use a key to access the value associated with that key.
  a dictionary is wrapped in braces, {}.
  A key-value pair is a set of values associated with each other. 
