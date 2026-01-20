@@ -232,11 +232,52 @@ for alien in aliens[:5]:
 ```
 
 A List in a Dictionary
+It’s sometimes useful to put a list inside a dictionary
+
+```python
+pizza = {
+    'crust': 'thick', 
+    'toppings': ['mushrooms','extra cheese']
+}
+print("Your ordered a "+ pizza['crust'] + "-curst pizza")
+for topping in pizza['toppings']:
+    print("\t" + topping)
+```
+output 
+```
+Your ordered a thick-curst pizza
+        mushrooms
+        extra cheese
+```
+
 
 A Dictionary in a Dictionary
+You can nest a dictionary inside another dictionary, but your code can get complicated quickly when you do.
 
+```python
+users = {
+    'aeinstein': {
+        'first': 'albert',
+        'last': 'einstein',
+        'location': 'princeton',
+    },
+    'mcurie': {
+        'first': 'marie',
+        'last': 'curie',
+        'location': 'paris',
+    },
+}
 
+for username, user_info in users.items():
+    print("\nUsername: " + username)
 
+    full_name = user_info['first'] + " " + user_info['last']
+    location = user_info['location']
+
+    print("\tFull name: " + full_name.title())
+    print("\tLocation: " + location.title())
+
+```
 
 
 
