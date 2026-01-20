@@ -13,7 +13,18 @@
  -Nesting:
    list of dictionaries
    dictionary of dictionaries
-   list inside dictiona
+   list inside dictionary
+**to cover**
+  - Using get() to Avoid Errors
+  - Checking If a Key Exists (in keyword)
+  - Removing Items Safely with pop()
+  - Dictionary Length (len())
+  - Looping Over Keys and Values Separately (Explicitly)
+  - Using set() with .values() to Avoid Duplicates
+  - Dictionary Comprehensions (Intermediate but Important)
+  - Copying Dictionaries (copy() vs reference)
+  - Merging Dictionaries
+  - 
 
 A dictionary in Python is a collection of key-value pairs. Each key is connected to a value, and you can use a key to access the value associated with that key.
  a dictionary is wrapped in braces, {}.
