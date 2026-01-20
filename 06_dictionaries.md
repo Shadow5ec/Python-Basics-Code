@@ -1,19 +1,19 @@
 #  Dictonary 
-* topics covered *
-Dictionary creation
-Accessing values with []
-Adding key–value pairs
-Modifying values
-Deleting keys (del)
-Looping with:
-.items()
-.keys()
-.values()
-Sorting keys
-Nesting:
-list of dictionaries
-dictionary of dictionaries
-list inside dictiona
+**topics covered**
+- Dictionary creation
+- Accessing values with []
+- Adding key–value pairs
+- Modifying values
+- Deleting keys (del)
+- Looping with:
+  .items()
+  .keys()
+  .values()
+- Sorting keys
+ -Nesting:
+   list of dictionaries
+   dictionary of dictionaries
+   list inside dictiona
 
 A dictionary in Python is a collection of key-value pairs. Each key is connected to a value, and you can use a key to access the value associated with that key.
  a dictionary is wrapped in braces, {}.
