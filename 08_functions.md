@@ -85,8 +85,36 @@ When you start to use functions, don’t be surprised if you encounter errors ab
 
 ## Return Values
 ### Returning a Simple Value
+A function doesn’t always have to display its output directly. Instead, it can process some data and then return a value or set of values. the value retreund is called the return value. 
+```python
+def get_fromatted_name(first_name, last_name):
+    full_name = first_name + ' ' + last_name
+    return full_name
+
+musician = get_fromatted_name('alex', 'maina')
+print(musician)
+```
+When you call a function that returns a value, you need to provide a variable where the return value can be stored.
+
 ### Making an Argument Optional
+To make the middle name optional, we can give the middle_name argument an empty default value and ignore the argument unless the user provides a value.
+```python
+def get_fromatted_name(first_name, last_name, middle_name=''):
+    if middle_name:
+        full_name = first_name + ' ' + middle_name + ' ' + last_name
+    else: 
+        full_name = first_name + ' ' + last_name
+    return full_name.title()
+
+musician = get_fromatted_name('alex', 'maina')
+print(musician)
+musician = get_fromatted_name('alex','kigunda', 'maina')
+print(musician)
+```
 ### Returning a Dictionary
+
+
+
 ### Using a Function with a while Loop
 
 ## Passing a List
