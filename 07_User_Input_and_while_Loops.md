@@ -72,12 +72,58 @@ while True:
 ```
 
 **Using continue in a loop**
+Rather than breaking out of a loop entirely without executing the rest of its code, you can use the continue statement to return to the beginning of the loop based on the result of a conditional test.
+```python
+count = 0
 
-**Avoiding inifite loops**
+while count <= 10:
+    count +=1
+    if count % 2 == 0:
+        continue
+    print(count)
+```
 
 
 **Using a while loop with a dictonary or list**
+```python
+unconfirmed_users = ['alice', 'brian', 'candace']
+confirmed_users = []
 
+while unconfirmed_users:
+    current_user = unconfirmed_users.pop()
+    print("verifying user: " + current_user.title())
+    confirmed_users.append(current_user)
+print("The following users have been confirmed")
+for confrimed_user in confirmed_users:
+    print(confrimed_user.title())
+
+```
+
+Removing all instances of a specfic value from a list 
+```python
+pets = ['dog','cat','dog','goldfish','cat']
+print(pets)
+while 'cat' in pets:
+    pets.remove('cat')
+print(pets)
+```
+
+Filling a dictionary with user input 
+```python
+responses = {}
+polling_active = True
+
+while polling_active:
+    name = input("What is your name: ")
+    response = input("Which mountain would you like to climd someday: ")
+    responses[name] = response
+    repeat = input("Would you like for another person to respond (yes/no)? ")
+    if repeat == 'no':
+        polling_active = False
+print("\n ----Poll Resuts----")
+for a, b in responses.items():
+    print(a + " would like to climb " + b )
+```
 
 
 
