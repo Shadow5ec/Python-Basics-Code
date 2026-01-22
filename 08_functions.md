@@ -245,10 +245,95 @@ The double asterisks before the parameter **user_info cause Python to create an 
 
 
 ## Storing Your Functions in Modules
+You can go a step further by storing your functions in a separate file called a module and then importing that module into your main program.
+- Allows you to hide implementation details and focus on the program’s high-level logic
+- Makes it easy to reuse functions across multiple programs
+- Enables sharing useful functionality without exposing your entire codebase
+- Improves code organization and readability
+- Encourages modular design (separation of concerns)
+- Allows you to import and use libraries written by other programmers
+- Makes programs easier to maintain and update
+- Supports collaboration by sharing only what’s needed
+We start by first creating a module, a module is a file ending with .py that contains the code you wnat to import into your program.
+
+We start by creating our module. 
 ### Importing an Entire Module
+
+```python
+def make_pizza(size, *toppings):
+    print("making pizza of sise"  + str(size) + "With the following toppings")
+    print("The toppings are: ")
+    for t in toppings:
+        print("-" + t)
+```
+We then save it in the same folder as the file we will import it to and import the pizza. 
+```python
+import pizza 
+pizza.make_pizza(23, 'green_pepper', 'cheese', 'white onions', 'tomatos')
+```
+Now if we call our function we'll see that it works. 
+
+```python
+making pizza of sise23With the following toppings
+The toppings are: 
+-green_pepper
+-cheese
+-white onions
+-tomatos
+PS C:\Users\klax7>
+```
+When Python reads this file, the line import pizza tells Python to open the file pizza.py and copy all the functions from it into this program.
+If you use this kind of import statement to import an entire module named module_name.py, each function in the module is available through the following syntax:
+```python
+module_name.function_name()
+```
+
 ### Importing Specific Functions
+The general syntax and approach for importing a specific module is 
+```python
+from module_name import function_name
+```
+You can import as many functions as you want from a module by separating each function’s name with a comma
+```python
+from module_name import function_0, function_1, function_2
+```
+Our example form the pizza module. 
+```python
+from pizza import make_pizza
+make_pizza(23, 'green_pepper', 'cheese', 'white onions', 'tomatos')
+```
+
 ### Using as to Give a Function an Alias
+If the name of a function you’re importing might conflict with an existing name in your program or if the function name is long, you can use a short, unique alias—an alternate name similar to a nickname for the function
+```python
+from pizza import make_pizza as mp
+mp(23, 'green_pepper', 'cheese', 'white onions', 'tomatos')
+```
+The import statement shown here renames the function make_pizza() to mp() in this program.
+
 ### Using as to Give a Module an Alias
+You can also provide an alias for a module name. Giving a module a short alias, like p for pizza, allows you to call the module’s functions more quickly.
+```python
+import pizza as p
+p.make_pizza(23, 'green_pepper', 'cheese', 'white onions', 'tomatos')
+```
 ### Importing All Functions in a Module
+You can tell Python to import every function in a module by using the asterisk (*) operator.
+The asterisk in the import statement tells Python to copy every function from the module pizza into this program file. Because every function is imported, you can call each function by name without using the dot notation. However, it’s best not to use this approach when you’re working with larger modules that you didn’t write: if the module has a function name that matches an existing name in your project, you can get some unexpected results.
+```python
+from pizza import *
+make_pizza(23, 'green_pepper', 'cheese', 'white onions', 'tomatos')
+```
 
 ## Styling Functions
+
+- Use clear, descriptive function names
+- Function and module names use lowercase + underscores
+- Every function should have a docstring explaining what it does
+- Docstrings go right after the function definition
+- Default parameters use no spaces around `=`
+- Keyword arguments follow the same rule
+- Keep lines under 79 characters (PEP 8)
+- If a function is long, split parameters across lines
+- Separate functions with two blank lines
+- Put imports at the top of the file (after file comments)
