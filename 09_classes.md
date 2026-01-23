@@ -117,10 +117,102 @@ Johnie is now sitting
 ## Working with Classes and Instacee 
 
 The Car Class 
+```python
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make 
+        self.model = model 
+        self.year = year 
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    
+my_new_car = Car("audi", "a4", 2016)
+print(my_new_car.get_descriptive_name())
+```
+output 
+```python
+2016 Audi A4
+```
+### setting a default value for an attribute 
+```python
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model 
+        self.year = year 
+        self.odometer_reading = 0 
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self): 
+        print("This car has " + str(self.odometer_reading) + " miles on it.")    
 
+my_new_car = Car("audi", "A4", 2020)
+print(my_new_car.get_descriptive_name())
+my_new_car.read_odometer()
+```
+output 
+```python
+2020 Audi A4
+This car has 0 miles on it
+```
+### modifying attribute values 
+You can change an attribute value in three ways. 
+- Change the value directly
+- Set the value through a method
+- Increment the value 
 
+Modifying an Attribute’s Value Through a Method
+```python
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model 
+        self.year = year 
+        self.odometer_reading = 0 
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self): 
+        print("This car has " + str(self.odometer_reading) + " miles on it.")    
+    def upate_odometer(self, mirage): 
+        self.odometer_reading = mirage
 
-
+my_new_car = Car("audi", "A4", 2020)
+print(my_new_car.get_descriptive_name())
+my_new_car.upate_odometer(25)
+my_new_car.read_odometer()
+```
+Output. 
+```python
+2020 Audi A4
+This car has 25 miles on it.
+```
+Adding a way to make sure you can never rollback the odometer reading. 
+```python
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model 
+        self.year = year 
+        self.odometer_reading = 0 
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+        return long_name.title()
+    def read_odometer(self): 
+        print("This car has " + str(self.odometer_reading) + " miles on it.")    
+    def upate_odometer(self, mirage): 
+        if mirage >= self.odometer_reading: 
+            self.odometer_reading = mirage
+        else:
+            print("you cannot rollback an odometer!")
+my_new_car = Car("audi", "A4", 2020)
+print(my_new_car.get_descriptive_name())
+my_new_car.upate_odometer(25)
+my_new_car.read_odometer()
+```
+## inheritance
 
 
 
