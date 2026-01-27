@@ -171,23 +171,74 @@ The first argument is still the name of the file we want to open. The second arg
 
 Writing multiple file. 
 ```python
+file_name = 'opened_file.txt'
 
+with open(file_name, 'w') as file_object:
+    file_object.write("I love programming \n")
+    file_object.write("I love hacking and learning about computers \n")
+```
+**appending to a file** 
+When you open a file in append mode, Python doesn’t erase the file before returning the file object. Any lines you write to the file will be added at the end of the file. If the file doesn’t exist yet, Python will create an empty file for you.
+
+```python
+file_name = 'apended_text3.txt'
+
+status = True
+while status:
+    for i in range (30):
+        with open(file_name, 'a') as file_object:
+            file_object.write(str(i) + " This will be a fun loop to see \n")
+        if i == 10:
+            status = False
+            break
+```
+# Exceptions 
+Whenever an error occurs that makes Python unsure what to do next, it creates an exception object. If you write code that handles the exception, the program will continue running. If you don’t handle the exception, the program will halt and show a traceback, which includes a report of the exception that was raised.
+
+Handling the ZeroDivision Error Exception 
+using try-except blocks.
+
+```python
+try:
+    print(5/0)
+except ZeroDivisionError:
+    print("you cannot divide by zero")
+```
+If more code followed the try-except block, the program would continue running because we told Python how to handle the error
+
+Using Exceptions to Prevent Crashes
+simple calculator. 
+
+```python
+print("Give the numbers and i'll divide them: ")
+print("Enter 'q' to quit. ")
+
+while True: 
+    first_number = input("enter the first number: ")
+    if first_number == 'q':
+        break
+    second_number = input("enter the second number: ")
+    try:
+        answer = int(first_number) / int(second_number)
+    except ZeroDivisionError:
+        print("You cannot divide by 0")
+    else:
+        print(answer)
 ```
 
+Analyzing Text
+We’ll use the string method split(), which can build a list of words from a string. Here’s what split() does with a string containing just the title "Alice in Wonderland".
 
+```python
+>>> title = "Alice in Wonderland" 
+>>> title.split() 
+['Alice', 'in', 'Wonderland']
+>>>
+```
 
+The split() method separates a string into parts wherever it finds a space and stores all the parts of the string in a list
 
-
-
-
-
-
-
-
-
-
-
-
+sample program 
 
 
 
