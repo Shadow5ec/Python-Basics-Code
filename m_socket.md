@@ -1,934 +1,676 @@
-# Python Sockets Mastery Guide
-
-Complete guide to mastering Python sockets with all modules, functions, and simple examples.
-
----
+# Python Sockets Mastery Guide - Complete Learning Path
 
 ## Table of Contents
-
-1. [Socket Basics](#socket-basics)
-2. [Socket Module](#socket-module)
-3. [Socket Types](#socket-types)
-4. [Core Functions](#core-functions)
-5. [Server Implementation](#server-implementation)
-6. [Client Implementation](#client-implementation)
-7. [Communication Patterns](#communication-patterns)
-8. [Error Handling](#error-handling)
-9. [Advanced Topics](#advanced-topics)
-10. [Real-World Examples](#real-world-examples)
+1. [Fundamentals](#fundamentals)
+2. [Socket Module Overview](#socket-module-overview)
+3. [Basic Socket Operations](#basic-socket-operations)
+4. [Server-Client Communication](#server-client-communication)
+5. [Advanced Concepts](#advanced-concepts)
+6. [Real-World Examples](#real-world-examples)
+7. [Best Practices](#best-practices)
 
 ---
 
-## Socket Basics
+## Fundamentals
 
 ### What is a Socket?
+A socket is an **endpoint for sending or receiving data** across a network. Think of it like a telephone jack - you plug in and connect to another socket.
 
-A socket is an endpoint for sending or receiving data across a network. Think of it like a telephone jack - it's the interface your program uses to connect to the network.
+### Types of Sockets
+- **TCP Sockets (SOCK_STREAM)**: Reliable, ordered, connection-based
+- **UDP Sockets (SOCK_DGRAM)**: Fast, connectionless, may lose data
+- **Raw Sockets (SOCK_RAW)**: Low-level, direct IP protocol access
 
-**Key Concepts:**
-- **Host:** Computer's address (IP)
-- **Port:** Application's address on the computer (0-65535)
-- **Protocol:** Rules for communication (TCP, UDP)
-- **Connection:** Established link between two sockets
-
----
-
-## Socket Module
-
-### Import the Socket Module
-
-```python
-import socket
-```
-
-### Essential Socket Module Attributes
-
-```python
-# Address families
-socket.AF_INET          # IPv4
-socket.AF_INET6         # IPv6
-socket.AF_UNIX          # Unix sockets
-
-# Socket types
-socket.SOCK_STREAM      # TCP (connection-oriented)
-socket.SOCK_DGRAM       # UDP (connectionless)
-socket.SOCK_RAW         # Raw socket
-
-# Common constants
-socket.IPPROTO_TCP      # TCP protocol
-socket.IPPROTO_UDP      # UDP protocol
-socket.SOL_SOCKET       # Socket level options
-```
+### Address Families
+- **AF_INET**: IPv4 addresses (192.168.1.1)
+- **AF_INET6**: IPv6 addresses
+- **AF_UNIX**: Local file sockets
 
 ---
 
-## Socket Types
+## Socket Module Overview
 
-### 1. TCP Sockets (SOCK_STREAM)
-
-**Characteristics:**
-- Connection-oriented (must establish connection first)
-- Reliable data delivery (guaranteed, ordered)
-- Used for: HTTP, FTP, Email, SSH
-- Slower but safer
-
+### Importing the Socket Module
 ```python
 import socket
-
-# Create TCP socket
-tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ```
 
-### 2. UDP Sockets (SOCK_DGRAM)
+### Core Module Functions
 
-**Characteristics:**
-- Connectionless (send data without connection)
-- Unreliable delivery (data may be lost)
-- Used for: DNS, Video streaming, Online games
-- Faster but less reliable
+#### 1. **socket.socket()**
+Creates a new socket object.
 
 ```python
-import socket
+# Simplest form - TCP socket for IPv4
+sock = socket.socket()
 
-# Create UDP socket
-udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-```
-
----
-
-## Core Functions
-
-### Socket Creation
-
-```python
-import socket
-
-# TCP Socket
+# Explicit parameters
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# UDP Socket
+# UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-# IPv6 TCP Socket
-sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
 ```
 
-### Binding to Port
+#### 2. **socket.gethostname()**
+Gets your computer's hostname.
 
 ```python
+hostname = socket.gethostname()
+print(hostname)  # Output: your-computer-name
+```
+
+#### 3. **socket.gethostbyname()**
+Converts hostname to IP address.
+
+```python
+ip = socket.gethostbyname('localhost')
+print(ip)  # Output: 127.0.0.1
+
+ip = socket.gethostbyname('google.com')
+print(ip)  # Output: 142.251.32.46 (example)
+```
+
+#### 4. **socket.inet_aton() / socket.inet_ntoa()**
+Convert between IP address formats.
+
+```python
+# String to bytes
+ip_bytes = socket.inet_aton('192.168.1.1')
+
+# Bytes to string
+ip_string = socket.inet_ntoa(ip_bytes)
+```
+
+#### 5. **socket.getservbyname()**
+Gets port number for a service.
+
+```python
+port = socket.getservbyname('http')
+print(port)  # Output: 80
+
+port = socket.getservbyname('https')
+print(port)  # Output: 443
+```
+
+---
+
+## Basic Socket Operations
+
+### Server Socket Methods
+
+#### 1. **bind(address)**
+Bind socket to an address and port.
+
+```python
+import socket
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 5000))
-# Bind to specific address and port
 # ('localhost', 5000) = (host, port)
 ```
 
-### Listening for Connections (Server)
+#### 2. **listen(backlog)**
+Listen for incoming connections. Backlog = max queued connections.
 
 ```python
-sock.listen(5)
-# Listen with max 5 connections in queue
-# Only for TCP/SOCK_STREAM
+sock.listen(5)  # Queue up to 5 connections
 ```
 
-### Accepting Connections (Server)
+#### 3. **accept()**
+Accept an incoming connection. Returns (socket, address).
 
 ```python
 client_socket, client_address = sock.accept()
-# Returns: (socket object, (client_ip, client_port))
+print(f"Connected to {client_address}")
 ```
 
-### Connecting to Server (Client)
-
-```python
-sock.connect(('localhost', 5000))
-# Connect to host:port
-# Only for TCP/SOCK_STREAM
-```
-
-### Sending Data
-
-```python
-# TCP - Send to connected socket
-sock.send(b'Hello')
-# Must send bytes, not strings
-
-# UDP - Send to specific address
-sock.sendto(b'Hello', ('localhost', 5000))
-```
-
-### Receiving Data
-
-```python
-# TCP - Receive from connected socket
-data = sock.recv(1024)
-# 1024 = max bytes to receive
-# Returns bytes object
-
-# UDP - Receive and get sender info
-data, address = sock.recvfrom(1024)
-# Returns (data, (sender_ip, sender_port))
-```
-
-### Closing Socket
+#### 4. **close()**
+Close the socket.
 
 ```python
 sock.close()
-# Closes the socket connection
 ```
 
-### Socket Options
+### Client Socket Methods
+
+#### 1. **connect(address)**
+Connect to a server.
 
 ```python
-# Set socket options
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-# This allows reusing address/port immediately
-
-# Get socket options
-value = sock.getsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect(('localhost', 5000))
 ```
 
-### Getting Socket Information
+#### 2. **connect_ex(address)**
+Same as connect() but returns error code instead of raising exception.
 
 ```python
-# Get socket name (local address)
-sock.getsockname()  # Returns (ip, port)
-
-# Get peer name (remote address)
-sock.getpeername()  # Returns (ip, port)
+error = sock.connect_ex(('localhost', 5000))
+if error == 0:
+    print("Connected!")
+else:
+    print(f"Connection failed: {error}")
 ```
 
-### Shutdown Socket
+### Data Transfer Methods
+
+#### 1. **send(data)**
+Send bytes to connected socket.
 
 ```python
-# Shutdown before closing
-sock.shutdown(socket.SHUT_RDWR)
-# SHUT_RD = stop receiving
-# SHUT_WR = stop sending
-# SHUT_RDWR = stop both
+message = "Hello Server"
+sock.send(message.encode())  # Must be bytes, not string
+```
+
+#### 2. **sendall(data)**
+Send all data (keeps sending until everything is sent).
+
+```python
+sock.sendall(b"Hello Server")  # Better for large data
+```
+
+#### 3. **recv(bufsize)**
+Receive up to bufsize bytes.
+
+```python
+data = sock.recv(1024)  # Receive up to 1024 bytes
+message = data.decode()  # Convert bytes to string
+```
+
+#### 4. **recvfrom(bufsize)**
+Receive data and sender address (mainly for UDP).
+
+```python
+data, address = sock.recvfrom(1024)
 ```
 
 ---
 
-## Server Implementation
+## Server-Client Communication
 
 ### Simple TCP Server
 
 ```python
 import socket
 
-def start_tcp_server():
+def simple_server():
     # Create socket
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
-    # Allow reusing address
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    
-    # Bind to port
-    server_socket.bind(('localhost', 5000))
+    # Bind to localhost:5000
+    server_sock.bind(('localhost', 5000))
     
     # Listen for connections
-    server_socket.listen(5)
-    print("Server listening on port 5000...")
+    server_sock.listen(1)
+    print("Server waiting for connection...")
     
-    try:
-        while True:
-            # Accept connection
-            client_socket, client_address = server_socket.accept()
-            print(f"Client connected: {client_address}")
-            
-            # Receive data
-            data = client_socket.recv(1024)
-            print(f"Received: {data.decode()}")
-            
-            # Send response
-            client_socket.send(b"Message received!")
-            
-            # Close client socket
-            client_socket.close()
+    # Accept connection
+    client_sock, client_address = server_sock.accept()
+    print(f"Connected to {client_address}")
     
-    except KeyboardInterrupt:
-        print("Server shutting down...")
+    # Receive data
+    data = client_sock.recv(1024)
+    print(f"Received: {data.decode()}")
     
-    finally:
-        server_socket.close()
+    # Send response
+    client_sock.send("Hello from server".encode())
+    
+    # Close
+    client_sock.close()
+    server_sock.close()
 
-# Run server
-if __name__ == "__main__":
-    start_tcp_server()
+simple_server()
 ```
-
-### Simple TCP Server with Threading
-
-```python
-import socket
-import threading
-
-def handle_client(client_socket, client_address):
-    print(f"Client connected: {client_address}")
-    
-    try:
-        data = client_socket.recv(1024)
-        print(f"Received from {client_address}: {data.decode()}")
-        
-        client_socket.send(b"Message received!")
-    
-    except Exception as e:
-        print(f"Error: {e}")
-    
-    finally:
-        client_socket.close()
-
-def start_tcp_server_threaded():
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server_socket.bind(('localhost', 5000))
-    server_socket.listen(5)
-    
-    print("Server listening on port 5000...")
-    
-    try:
-        while True:
-            client_socket, client_address = server_socket.accept()
-            
-            # Create thread for each client
-            thread = threading.Thread(
-                target=handle_client,
-                args=(client_socket, client_address)
-            )
-            thread.daemon = True
-            thread.start()
-    
-    except KeyboardInterrupt:
-        print("Server shutting down...")
-    
-    finally:
-        server_socket.close()
-
-if __name__ == "__main__":
-    start_tcp_server_threaded()
-```
-
-### Simple UDP Server
-
-```python
-import socket
-
-def start_udp_server():
-    # Create UDP socket
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    
-    # Bind to port
-    server_socket.bind(('localhost', 5000))
-    
-    print("UDP Server listening on port 5000...")
-    
-    try:
-        while True:
-            # Receive data and sender info
-            data, client_address = server_socket.recvfrom(1024)
-            print(f"Received from {client_address}: {data.decode()}")
-            
-            # Send response back
-            server_socket.sendto(b"Message received!", client_address)
-    
-    except KeyboardInterrupt:
-        print("Server shutting down...")
-    
-    finally:
-        server_socket.close()
-
-if __name__ == "__main__":
-    start_udp_server()
-```
-
----
-
-## Client Implementation
 
 ### Simple TCP Client
 
 ```python
 import socket
 
-def tcp_client():
+def simple_client():
     # Create socket
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
-    try:
-        # Connect to server
-        client_socket.connect(('localhost', 5000))
-        print("Connected to server")
-        
-        # Send message
-        message = "Hello Server!"
-        client_socket.send(message.encode())
-        print(f"Sent: {message}")
-        
-        # Receive response
-        response = client_socket.recv(1024)
-        print(f"Received: {response.decode()}")
+    # Connect to server
+    client_sock.connect(('localhost', 5000))
+    print("Connected to server")
     
-    except ConnectionRefusedError:
-        print("Could not connect to server")
+    # Send data
+    client_sock.send("Hello from client".encode())
     
-    except Exception as e:
-        print(f"Error: {e}")
+    # Receive response
+    data = client_sock.recv(1024)
+    print(f"Received: {data.decode()}")
     
-    finally:
-        client_socket.close()
+    # Close
+    client_sock.close()
 
-if __name__ == "__main__":
-    tcp_client()
-```
-
-### Simple UDP Client
-
-```python
-import socket
-
-def udp_client():
-    # Create UDP socket
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    
-    try:
-        # Send message to server
-        message = "Hello UDP Server!"
-        client_socket.sendto(message.encode(), ('localhost', 5000))
-        print(f"Sent: {message}")
-        
-        # Receive response
-        data, server_address = client_socket.recvfrom(1024)
-        print(f"Received from {server_address}: {data.decode()}")
-    
-    except Exception as e:
-        print(f"Error: {e}")
-    
-    finally:
-        client_socket.close()
-
-if __name__ == "__main__":
-    udp_client()
+simple_client()
 ```
 
 ---
 
-## Communication Patterns
+## Advanced Concepts
 
-### 1. Request-Response Pattern (TCP)
+### Socket Options: setsockopt() and getsockopt()
 
-**Server waits for request, sends response**
-
-```python
-# SERVER
-import socket
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind(('localhost', 5000))
-server.listen(1)
-
-client, addr = server.accept()
-request = client.recv(1024)
-client.send(b"Response: " + request)
-client.close()
-server.close()
-
-# CLIENT
-import socket
-
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('localhost', 5000))
-client.send(b"My request")
-response = client.recv(1024)
-print(response)
-client.close()
-```
-
-### 2. Echo Server Pattern
-
-**Server echoes back what client sends**
+#### 1. **SO_REUSEADDR**
+Allow socket to bind to address even if in TIME_WAIT state.
 
 ```python
-# SERVER
-import socket
-
-def echo_server():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('localhost', 5000))
-    server.listen(1)
-    
-    client, addr = server.accept()
-    print(f"Connected: {addr}")
-    
-    while True:
-        data = client.recv(1024)
-        if not data:
-            break
-        client.send(data)  # Echo back
-    
-    client.close()
-    server.close()
-
-echo_server()
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 ```
 
-### 3. Broadcast Pattern (UDP)
-
-**Send message to multiple recipients**
+#### 2. **SO_KEEPALIVE**
+Enable TCP keep-alive.
 
 ```python
-import socket
-
-def broadcast():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    
-    # Send to broadcast address
-    sock.sendto(b"Hello everyone!", ('<broadcast>', 5000))
-    sock.close()
-
-broadcast()
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 ```
 
-### 4. Multiple Client Handling (Threading)
+#### 3. **SO_RCVBUF / SO_SNDBUF**
+Set receive/send buffer size.
+
+```python
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4096)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 4096)
+```
+
+#### 4. **TCP_NODELAY**
+Disable Nagle's algorithm (send data immediately).
+
+```python
+sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+```
+
+### Getting Socket Options
+
+```python
+# Get receive buffer size
+rcv_buf = sock.getsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF)
+print(f"Receive buffer: {rcv_buf}")
+```
+
+### Socket Timeouts
+
+```python
+# Set timeout to 5 seconds
+sock.settimeout(5)
+
+# Set no timeout (blocking)
+sock.settimeout(None)
+
+# Set non-blocking
+sock.settimeout(0)
+```
+
+### Blocking vs Non-Blocking
+
+```python
+# Blocking socket (default) - waits for operation to complete
+sock.setblocking(True)
+
+# Non-blocking socket - returns immediately
+sock.setblocking(False)
+```
+
+### Multi-Client Server with Threading
 
 ```python
 import socket
 import threading
 
-def handle_client(sock, addr):
-    print(f"Client: {addr}")
-    sock.send(b"Hello client!")
-    sock.close()
+def handle_client(client_sock, address):
+    print(f"Connected to {address}")
+    try:
+        data = client_sock.recv(1024)
+        print(f"Received from {address}: {data.decode()}")
+        client_sock.send("Got your message".encode())
+    finally:
+        client_sock.close()
 
-def server():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind(('localhost', 5000))
-    s.listen(5)
+def multi_server():
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_sock.bind(('localhost', 5000))
+    server_sock.listen(5)
+    print("Server started on localhost:5000")
+    
+    try:
+        while True:
+            client_sock, address = server_sock.accept()
+            # Handle each client in separate thread
+            thread = threading.Thread(target=handle_client, args=(client_sock, address))
+            thread.daemon = True
+            thread.start()
+    finally:
+        server_sock.close()
+
+multi_server()
+```
+
+### UDP Socket Example
+
+```python
+import socket
+
+def udp_server():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind(('localhost', 5000))
+    print("UDP Server listening...")
     
     while True:
-        client, addr = s.accept()
-        thread = threading.Thread(target=handle_client, args=(client, addr))
-        thread.daemon = True
-        thread.start()
+        data, address = sock.recvfrom(1024)
+        print(f"Received from {address}: {data.decode()}")
+        sock.sendto("Got it!".encode(), address)
 
-server()
-```
-
----
-
-## Error Handling
-
-### Common Socket Errors
-
-```python
-import socket
-
-try:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('localhost', 5000))
-    
-except socket.timeout:
-    print("Connection timed out")
-
-except socket.gaierror:
-    print("Address-related error")
-
-except socket.error as e:
-    print(f"Socket error: {e}")
-
-except ConnectionRefusedError:
-    print("Connection refused by server")
-
-except OSError as e:
-    print(f"OS error: {e}")
-
-except Exception as e:
-    print(f"Unexpected error: {e}")
-```
-
-### Timeout Handling
-
-```python
-import socket
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Set timeout in seconds
-sock.settimeout(5)
-
-try:
-    sock.connect(('localhost', 5000))
-except socket.timeout:
-    print("Connection timed out after 5 seconds")
-
-# Disable timeout
-sock.settimeout(None)
-
-# Set timeout for receive
-sock.settimeout(2)
-try:
-    data = sock.recv(1024)
-except socket.timeout:
-    print("No data received within 2 seconds")
-```
-
----
-
-## Advanced Topics
-
-### 1. Non-Blocking Sockets
-
-```python
-import socket
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Make socket non-blocking
-sock.setblocking(False)
-
-try:
-    sock.connect(('localhost', 5000))
-except BlockingIOError:
-    print("Connection in progress...")
-
-try:
-    data = sock.recv(1024)
-except BlockingIOError:
-    print("No data available right now")
-```
-
-### 2. Select Module (Multiplexing)
-
-```python
-import socket
-import select
-
-# Create sockets
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('localhost', 5000))
-server.listen(5)
-
-sockets = [server]
-
-while True:
-    # Wait for sockets to be ready
-    readable, _, _ = select.select(sockets, [], [])
-    
-    for sock in readable:
-        if sock == server:
-            client, addr = server.accept()
-            sockets.append(client)
-            print(f"New connection: {addr}")
-        else:
-            data = sock.recv(1024)
-            if not data:
-                sockets.remove(sock)
-            else:
-                print(f"Received: {data.decode()}")
-```
-
-### 3. Socket Address Info
-
-```python
-import socket
-
-# Get address information
-result = socket.getaddrinfo('localhost', 5000)
-# Returns list of (family, type, proto, canonname, sockaddr)
-
-for family, type, proto, canonname, sockaddr in result:
-    print(f"Family: {family}, Type: {type}, Address: {sockaddr}")
-
-# Get host by name
-ip = socket.gethostbyname('localhost')
-print(f"IP: {ip}")
-
-# Get host name
-hostname = socket.gethostname()
-print(f"Hostname: {hostname}")
-```
-
-### 4. Socket Keepalive
-
-```python
-import socket
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Enable keepalive
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-
-# For Linux: set keepalive intervals
-if hasattr(socket, 'TCP_KEEPIDLE'):
-    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 120)
-    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 30)
-    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 5)
+def udp_client():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.sendto("Hello UDP".encode(), ('localhost', 5000))
+    data, _ = sock.recvfrom(1024)
+    print(f"Received: {data.decode()}")
+    sock.close()
 ```
 
 ---
 
 ## Real-World Examples
 
-### 1. HTTP Client
+### Example 1: HTTP GET Request
 
 ```python
 import socket
 
-def http_request(host, path='/'):
+def http_get(host, path='/'):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((host, 80))
     
-    try:
-        # Connect to web server
-        sock.connect((host, 80))
-        
-        # Send HTTP request
-        request = f"GET {path} HTTP/1.1\r\nHost: {host}\r\nConnection: close\r\n\r\n"
-        sock.send(request.encode())
-        
-        # Receive response
-        response = b""
-        while True:
-            data = sock.recv(4096)
-            if not data:
-                break
-            response += data
-        
-        print(response.decode())
+    # Send HTTP request
+    request = f"GET {path} HTTP/1.1\r\nHost: {host}\r\nConnection: close\r\n\r\n"
+    sock.sendall(request.encode())
     
-    finally:
-        sock.close()
+    # Receive response
+    response = b""
+    while True:
+        chunk = sock.recv(4096)
+        if not chunk:
+            break
+        response += chunk
+    
+    sock.close()
+    return response.decode('utf-8', errors='ignore')
 
 # Usage
-http_request('example.com', '/')
+html = http_get('example.com')
+print(html[:500])
 ```
 
-### 2. File Transfer Server
-
-```python
-import socket
-import os
-
-def file_server():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('localhost', 5000))
-    server.listen(1)
-    
-    client, addr = server.accept()
-    print(f"File request from {addr}")
-    
-    # Get filename from client
-    filename = client.recv(1024).decode()
-    
-    # Send file
-    if os.path.exists(filename):
-        with open(filename, 'rb') as f:
-            while True:
-                data = f.read(4096)
-                if not data:
-                    break
-                client.send(data)
-        print("File sent")
-    else:
-        client.send(b"File not found")
-    
-    client.close()
-    server.close()
-
-file_server()
-```
-
-### 3. File Transfer Client
+### Example 2: Port Scanner
 
 ```python
 import socket
 
-def file_client(host, port, filename):
+def scan_port(host, port, timeout=1):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock.settimeout(timeout)
     
-    # Request file
-    sock.send(filename.encode())
-    
-    # Receive file
-    with open(f"downloaded_{filename}", 'wb') as f:
-        while True:
-            data = sock.recv(4096)
-            if not data:
-                break
-            f.write(data)
-    
-    print("File downloaded")
-    sock.close()
+    try:
+        result = sock.connect_ex((host, port))
+        sock.close()
+        return result == 0  # True if port is open
+    except socket.timeout:
+        return False
 
-file_client('localhost', 5000, 'myfile.txt')
+def scan_ports(host, ports):
+    open_ports = []
+    for port in ports:
+        if scan_port(host, port):
+            open_ports.append(port)
+            print(f"Port {port} is OPEN")
+        else:
+            print(f"Port {port} is closed")
+    return open_ports
+
+# Usage
+ports = range(1, 100)
+scan_ports('localhost', ports)
 ```
 
-### 4. Simple Chat Application
+### Example 3: Echo Server (Multi-threaded)
 
 ```python
-# SERVER
 import socket
 import threading
 
-def handle_chat_client(client_socket, clients_list):
-    try:
-        while True:
-            msg = client_socket.recv(1024)
-            if not msg:
-                break
-            
-            # Broadcast to all clients
-            for client in clients_list:
-                if client != client_socket:
-                    try:
-                        client.send(msg)
-                    except:
-                        pass
-    finally:
-        clients_list.remove(client_socket)
-        client_socket.close()
-
-def chat_server():
+def echo_server(host='localhost', port=5000):
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('localhost', 5000))
+    server.bind((host, port))
     server.listen(5)
+    print(f"Echo server started on {host}:{port}")
     
-    clients = []
+    def handle_connection(client, addr):
+        try:
+            while True:
+                data = client.recv(1024)
+                if not data:
+                    break
+                print(f"Echo from {addr}: {data.decode()}")
+                client.sendall(data)  # Echo back
+        finally:
+            client.close()
     
     try:
         while True:
             client, addr = server.accept()
-            clients.append(client)
-            print(f"User joined: {addr}")
-            
-            thread = threading.Thread(
-                target=handle_chat_client,
-                args=(client, clients)
-            )
+            thread = threading.Thread(target=handle_connection, args=(client, addr))
             thread.daemon = True
             thread.start()
     finally:
         server.close()
 
-chat_server()
-
-# CLIENT
-import socket
-import threading
-
-def receive_messages(sock):
-    while True:
-        try:
-            msg = sock.recv(1024)
-            if msg:
-                print(f"Message: {msg.decode()}")
-        except:
-            break
-
-def chat_client():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('localhost', 5000))
-    
-    # Start receiving thread
-    thread = threading.Thread(target=receive_messages, args=(sock,))
-    thread.daemon = True
-    thread.start()
-    
-    # Send messages
-    while True:
-        msg = input("You: ")
-        sock.send(msg.encode())
-
-chat_client()
+# Usage
+# echo_server()
 ```
 
-### 5. DNS Query (UDP)
+### Example 4: File Transfer
 
 ```python
 import socket
+import os
 
-def simple_dns_query(domain):
-    # This is a simplified example
-    # Real DNS requires specific packet format
+def send_file(filename, host, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((host, port))
     
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # Send filename
+    sock.sendall(os.path.basename(filename).encode())
+    sock.recv(1024)  # Wait for acknowledgment
     
-    try:
-        # Get IP of domain
-        ip = socket.gethostbyname(domain)
-        print(f"{domain} -> {ip}")
-    except socket.gaierror:
-        print(f"Cannot resolve {domain}")
-    finally:
-        sock.close()
+    # Send file
+    with open(filename, 'rb') as f:
+        while True:
+            data = f.read(4096)
+            if not data:
+                break
+            sock.sendall(data)
+    
+    sock.close()
+    print("File sent!")
 
-simple_dns_query('google.com')
+def receive_file(output_dir, port):
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(('localhost', port))
+    server.listen(1)
+    print(f"Waiting for file on port {port}...")
+    
+    client, addr = server.accept()
+    
+    # Receive filename
+    filename = client.recv(1024).decode()
+    client.sendall(b"OK")
+    
+    # Receive file
+    filepath = os.path.join(output_dir, filename)
+    with open(filepath, 'wb') as f:
+        while True:
+            data = client.recv(4096)
+            if not data:
+                break
+            f.write(data)
+    
+    client.close()
+    server.close()
+    print(f"File received: {filepath}")
 ```
 
 ---
 
-## Summary
+## Best Practices
 
-### Socket Workflow
+### 1. Always Close Sockets
+```python
+try:
+    sock = socket.socket()
+    sock.connect(('localhost', 5000))
+    # do work
+finally:
+    sock.close()
+```
 
-**TCP Server:**
-1. Create socket → Bind → Listen → Accept → Receive → Send → Close
+### 2. Use Context Manager (Recommended)
+```python
+with socket.socket() as sock:
+    sock.connect(('localhost', 5000))
+    # do work
+# Socket auto-closes
+```
 
-**TCP Client:**
-1. Create socket → Connect → Send → Receive → Close
+### 3. Handle Exceptions
+```python
+try:
+    sock = socket.socket()
+    sock.connect(('localhost', 5000))
+except socket.timeout:
+    print("Connection timeout")
+except socket.error as e:
+    print(f"Socket error: {e}")
+finally:
+    sock.close()
+```
 
-**UDP Server:**
-1. Create socket → Bind → RecvFrom → SendTo → Close
+### 4. Set SO_REUSEADDR for Servers
+```python
+server = socket.socket()
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind(('localhost', 5000))
+```
 
-**UDP Client:**
-1. Create socket → SendTo → RecvFrom → Close
+### 5. Use Proper Timeouts
+```python
+sock.settimeout(5)  # Prevent hanging indefinitely
+```
 
-### When to Use What
+### 6. Buffer Management
+```python
+# Don't hardcode buffer sizes, make them configurable
+BUFFER_SIZE = 4096
 
-| Protocol | Use Case | Reliable | Speed | Connection |
-|----------|----------|----------|-------|------------|
-| TCP | Email, Web, Files | Yes | Slower | Required |
-| UDP | DNS, Gaming, Streaming | No | Faster | Not needed |
+data = sock.recv(BUFFER_SIZE)
+```
 
-### Key Takeaways
-
-1. **Bytes not Strings:** Always encode/decode when sending/receiving
-2. **Always Close:** Use try-finally or context managers
-3. **Handle Errors:** Network operations always fail sometimes
-4. **Test Locally:** Use localhost:port for testing
-5. **Port Numbers:** Ports 0-1023 are reserved (need admin)
-6. **Reuse Address:** Use SO_REUSEADDR to restart servers quickly
-7. **Thread Pool:** Use threading for multiple clients
-8. **Timeouts:** Set timeouts to prevent hanging
+### 7. Graceful Shutdown
+```python
+def graceful_shutdown(sock):
+    try:
+        sock.shutdown(socket.SHUT_RDWR)
+    except:
+        pass
+    finally:
+        sock.close()
+```
 
 ---
 
-## Quick Reference
+## Common Socket Errors
+
+| Error | Meaning | Solution |
+|-------|---------|----------|
+| `ConnectionRefused` | Server not listening | Check server is running |
+| `TimeoutError` | Operation took too long | Increase timeout or check network |
+| `AddressAlreadyInUse` | Port already in use | Use SO_REUSEADDR or change port |
+| `ConnectionReset` | Connection abruptly closed | Peer closed connection |
+| `Timeout` | No data received | Set appropriate timeout |
+
+---
+
+## Learning Roadmap
+
+### Week 1: Fundamentals
+- [ ] Understand socket concept
+- [ ] Learn socket vs AF_INET vs SOCK_STREAM
+- [ ] Master socket(), bind(), listen(), accept()
+- [ ] Create simple echo server
+
+### Week 2: Client-Server
+- [ ] Build TCP client
+- [ ] Handle multiple clients with threading
+- [ ] Learn send(), recv(), sendall()
+- [ ] Practice connection handling
+
+### Week 3: Advanced
+- [ ] Learn socket options
+- [ ] Handle timeouts and non-blocking
+- [ ] Error handling patterns
+- [ ] Build multi-threaded server
+
+### Week 4: Real-World
+- [ ] HTTP client
+- [ ] Port scanner
+- [ ] File transfer
+- [ ] Protocol implementation
+
+---
+
+## Quick Reference Cheat Sheet
 
 ```python
 # Create socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Server side
-s.bind(('localhost', 5000))
-s.listen(5)
-conn, addr = s.accept()
+# Server
+sock.bind(('localhost', 5000))
+sock.listen(5)
+client, addr = sock.accept()
 
-# Client side
-s.connect(('localhost', 5000))
+# Client
+sock.connect(('localhost', 5000))
 
 # Send/Receive
-s.send(b'data')
-data = s.recv(1024)
+sock.send(b"data")
+sock.sendall(b"data")
+data = sock.recv(1024)
+
+# Socket options
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock.settimeout(5)
+sock.setblocking(False)
 
 # Close
-s.close()
+sock.close()
 ```
 
 ---
 
-**Now you have everything to master Python sockets! Start with simple examples and gradually build complexity.**
+## Additional Resources to Explore
+
+- **ssl module**: Secure sockets with encryption
+- **asyncio**: Async socket programming
+- **select module**: Monitor multiple sockets
+- **socketserver module**: High-level socket server framework
+- **http.server**: Built-in HTTP server
+
+---
+
+**Happy Learning! Master these fundamentals and you'll be able to build any networked application.** 🚀
