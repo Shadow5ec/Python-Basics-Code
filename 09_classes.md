@@ -25,6 +25,11 @@ Attributes:
 - self.name = name stores the dog’s name inside that specific dog object.
 - self.age = age does the same for age.
 
+There are type's of variables in a class. 
+
+
+
+
 ```python
 class Dog():
     def __init__(self, name, age):
