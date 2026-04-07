@@ -573,7 +573,26 @@ favorite_languages['phil'] = 'python'
 
 for name, language in favorite_languages.items():
     print(f"{name.title()}'s favorite language is {language.title()}.")
+```
+Let’s now look at a feature allowed by Python called multiple inheritance. As you may have guessed from the name, this is when a subclass inherits from more than one superclass. 
+You can also have multiple inheritance, i.e
+```python
+class Animal:
+  def __init__(self, name):
+    self.name = name
+ 
+  def say_hi(self):
+    print("{} says, Hi!".format(self.name))
 
+class Cat(Animal):
+  pass
+
+class Angry_Cat(Cat):
+  pass
+
+my_pet = Angry_Cat("Mr. Cranky")
+my_pet.say_hi() # Mr. Cranky says, Hi!
+```
 
 
 
