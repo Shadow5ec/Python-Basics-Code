@@ -317,6 +317,31 @@ my_tesla = ElectricCar('tesla','model-s', 2020)
 print(my_tesla.get_descriptive_name())
 my_tesla.describe_battery()
 ```
+Another example of the supper class. 
+```python
+class Employee():
+  new_id = 1
+  def __init__(self):
+    self.id = Employee.new_id
+    Employee.new_id += 1
+
+  def say_id(self):
+    print("My id is {}.".format(self.id))
+
+class Admin(Employee):
+  def say_id(self):
+    # Write your code below:
+    super().say_id()
+    
+    
+    print("I am an admin.")
+
+e1 = Employee()
+e2 = Employee()
+e3 = Admin()
+e3.say_id()
+```
+
 There’s no limit to how much you can specialize the ElectricCar class. You can add as many attributes and methods as you need to model an electric car to whatever degree of accuracy you need.
 
 ### Overriding Methods from the Parent Class
