@@ -26,8 +26,40 @@ Attributes:
 - self.age = age does the same for age.
 
 There are type's of variables in a class. 
+```python
+class Dog:
+    species = "Canine"  # 👈 class variable
 
+    def __init__(self, name):
+        self.name = name  # 👈 instance variable
+```
+#### class variable 
+belongs to the class itself, is shared by all instances (objects)
+```python
+class Car:
+    wheels = 4  # 👈 class variable
+```
+👉 Every car has 4 wheels — this doesn’t change per object.
 
+instance variable - belongs to a specific object, is different for each instance.
+```python
+class Car:
+    wheels = 4  # class variable
+
+    def __init__(self, brand):
+        self.brand = brand  # 👈 instance variable
+```
+putting it all together. 
+```python
+car1 = Car("Toyota")
+car2 = Car("BMW")
+
+print(car1.wheels)  # 4
+print(car2.wheels)  # 4
+
+print(car1.brand)   # Toyota
+print(car2.brand)   # BMW
+```
 
 
 ```python
