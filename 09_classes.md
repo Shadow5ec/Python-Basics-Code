@@ -1,4 +1,25 @@
 # Classes 
+Must know concepts 
+# Introduction to Object-Oriented Programming
+
+## OOP Pillar: Inheritance
+- [ ] Inheritance
+- [ ] Overriding Methods
+- [ ] super()
+- [ ] Multiple Inheritance: Part 1
+- [ ] Multiple Inheritance: Part 2
+
+## OOP Pillar: Polymorphism
+- [ ] Polymorphism
+- [ ] Dunder Methods
+
+## OOP Pillar: Abstraction
+- [ ] Abstraction
+
+## OOP Pillar: Encapsulation
+- [ ] Encapsulation
+- [ ] Getters, Setters and Deleters
+
 Object-oriented programming is one of the most effective approaches to writing software. When you write a class, you define the general behavior that a whole category of objects can have.
 
 **Creating the dog class**
